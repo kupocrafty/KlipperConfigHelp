@@ -1,0 +1,249 @@
+# This file contains common pin mappings for the BigTreeTech Octopus
+# and Octopus Pro boards. To use this config, start by identifying the
+# micro-controller on the board - it may be an STM32F446, STM32F429,
+# or an STM32H723.  Select the appropriate micro-controller in "make
+# menuconfig" and select "Enable low-level configuration options". For
+# STM32F446 boards the firmware should be compiled with a "32KiB
+# bootloader" and a "12MHz crystal" clock reference. For STM32F429
+# boards use a "32KiB bootloader" and an "8MHz crystal". For STM32H723
+# boards use a "128KiB bootloader" and a "25Mhz crystal".
+
+# See docs/Config_Reference.md for a description of parameters.
+
+# Driver0
+[stepper_x]
+step_pin: PF13
+dir_pin: PF12
+enable_pin: !PF14
+microsteps: 32
+rotation_distance: 40
+endstop_pin: PG6
+position_endstop: -1
+position_min: -1
+position_max: 345 #for bed mesh
+homing_speed: 50
+
+# Driver1
+[stepper_y]
+step_pin: PG0
+dir_pin: PG1
+enable_pin: !PF15
+microsteps: 32
+rotation_distance: 40
+endstop_pin: PG9
+position_endstop: 0
+position_max: 320
+homing_speed: 50
+
+# Driver2
+[stepper_z1]
+step_pin: PF11
+dir_pin: PG3
+enable_pin: !PG5
+microsteps: 32
+rotation_distance: 8
+endstop_pin: z_virtual_endstop
+position_max: 400
+position_min: -2
+
+# Driver3
+[stepper_z2]
+step_pin: PG4
+dir_pin: PC1
+enable_pin: PA0
+microsteps: 32
+rotation_distance: 8
+endstop_pin: z_virtual_endstop
+position_max: 400
+position_min: -2
+
+# Driver4
+[extruder]
+step_pin: PF9
+dir_pin: PF10
+enable_pin: !PG2
+microsteps: 16
+gear_ratio: 50:17
+rotation_distance: 10.95
+nozzle_diameter: 0.400
+filament_diameter: 1.750
+heater_pin: PA2 # HE0
+sensor_pin:  PF4 # T0
+sensor_type: ATC Semitec 104GT-2
+control: pid
+pid_Kp: 22.936
+pid_Ki: 1.390
+pid_Kd: 94.610
+min_temp: 0
+max_temp: 310 #All Metal V6 has 300 max temp, giving a little wiggle for heatup
+max_extrude_cross_section: 50.0
+
+[firmware_retraction]
+retract_length: 0.5
+retract_speed: 20
+unretract_extra_length: 0
+unretract_speed: 20
+
+#[filament_switch_sensor material_0]
+#switch_pin: PG12
+
+# Driver5
+#[extruder1]
+#step_pin: PC13
+#dir_pin: PF0
+#enable_pin: !PF1
+#heater_pin: PA3 # HE1
+#sensor_pin: PF5 # T1
+#...
+
+#[filament_switch_sensor material_1]
+#switch_pin: PG13
+
+# Driver6
+#[extruder2]
+#step_pin: PE2
+#dir_pin: PE3
+#enable_pin: !PD4
+#heater_pin: PB10 # HE2
+#sensor_pin: PF6 # T2
+#...
+
+#[filament_switch_sensor material_2]
+#switch_pin: PG14
+
+# Driver7
+#[extruder3]
+#step_pin: PE6
+#dir_pin: PA14
+#enable_pin: !PE0
+#heater_pin: PB11 # HE3
+#sensor_pin: PF7 # T3
+#...
+
+#[filament_switch_sensor material_3]
+#switch_pin: PG15
+
+[heater_bed]
+heater_pin: PA1
+sensor_pin: PF3 # TB
+sensor_type: EPCOS 100K B57560G104F
+control = pid
+pid_kp = 74.722
+pid_ki = 0.696
+pid_kd = 2006.297
+min_temp: 0
+max_temp: 130
+
+[fan]
+pin: PA8
+
+#[heater_fan fan1]
+#pin: PE5
+
+#[heater_fan fan2]
+#pin: PD12
+
+#[heater_fan fan3]
+#pin: PD13
+
+#[heater_fan fan4]
+#pin: PD14
+
+#[controller_fan fan5]
+#pin: PD15
+
+[mcu]
+serial: /dev/serial/by-id/usb-Klipper_Klipper_firmware_12345-if00
+# CAN bus is also available on this board
+
+[printer]
+kinematics: corexy
+max_velocity: 300
+max_accel: 3000
+max_z_velocity: 25
+max_z_accel: 30
+square_corner_velocity: 5
+
+[input_shaper]
+shaper_freq_x: 57.41
+shaper_freq_y: 56.6
+shaper_type: mzv
+
+[force_move]
+enable_force_move: True
+
+########################################
+# TMC2209 configuration
+########################################
+
+[tmc2209 stepper_x]
+uart_pin: PC4
+##diag_pin: PG6
+run_current: 0.800
+stealthchop_threshold: 999999
+
+[tmc2209 stepper_y]
+uart_pin: PD11
+##diag_pin: PG9
+run_current: 0.800
+stealthchop_threshold: 999999
+
+[tmc2209 stepper_z1]
+#uart_pin: PC6
+#diag_pin: PG10
+run_current: 0.650
+stealthchop_threshold: 999999
+
+[tmc2209 stepper_z2]
+uart_pin: PC7
+##diag_pin: PG11
+run_current: 0.650
+stealthchop_threshold: 999999
+
+[tmc2209 extruder]
+uart_pin: PF2
+run_current: 0.800
+stealthchop_threshold: 999999
+
+#[tmc2209 extruder1]
+#uart_pin: PE4
+#run_current: 0.800
+#stealthchop_threshold: 999999
+
+#[tmc2209 extruder2]
+#uart_pin: PE1
+#run_current: 0.800
+#stealthchop_threshold: 999999
+
+#[tmc2209 extruder3]
+#uart_pin: PD3
+#run_current: 0.800
+#stealthchop_threshold: 999999
+
+
+
+[board_pins]
+aliases:
+    # EXP1 header
+    EXP1_1=PE8, EXP1_2=PE7,
+    EXP1_3=PE9, EXP1_4=PE10,
+    EXP1_5=PE12, EXP1_6=PE13,    # Slot in the socket on this side
+    EXP1_7=PE14, EXP1_8=PE15,
+    EXP1_9=<GND>, EXP1_10=<5V>,
+
+    # EXP2 header
+    EXP2_1=PA6, EXP2_2=PA5,
+    EXP2_3=PB1, EXP2_4=PA4,
+    EXP2_5=PB2, EXP2_6=PA7,      # Slot in the socket on this side
+    EXP2_7=PC15, EXP2_8=<RST>,
+    EXP2_9=<GND>, EXP2_10=PC5
+
+# See the sample-lcd.cfg file for definitions of common LCD displays.
+
+
+[probe]
+pin: PC5
+x_offset: -39.98
+y_offset:  3.76
+speed: 30
+z_offset: 1
